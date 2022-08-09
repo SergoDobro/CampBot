@@ -1,0 +1,19 @@
+on: push
+
+jobs:
+  Build-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push image
+        run: |
+          docker build -t ghcr.io/sergodobro/campbot:latest .
+          docker push ghcr.io/sergodobro/campbot:latest
